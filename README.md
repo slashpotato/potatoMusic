@@ -1,5 +1,4 @@
 # potatoMusic
------
 An qt music player
 
 ### building
