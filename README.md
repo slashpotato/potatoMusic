@@ -1,10 +1,10 @@
 # potatoMusic
 An qt music player
 
-### building
+## building
 run `build.sh`
 
-###### **or**
+### **or**
 ```shell
 qmake
 make
