@@ -2,7 +2,7 @@
 An qt music player for linux
 
 ## building
-run `build.sh`
+Run `build.sh`
 
 #### **or**
 ```shell
