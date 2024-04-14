@@ -155,5 +155,6 @@ void onPause() {
 
 void setVolume() {
     QInputDialog *dialog = new QInputDialog();
+    dialog->setWindowTitle("0-100");
     dialog->show();
 }
