@@ -4,6 +4,7 @@
 #include <QApplication>
 #include <QWidget>
 #include <QHBoxLayout>
+#include <QVBoxLayout>
 #include <QGridLayout>
 #include <QPushButton>
 #include <QMessageBox>
@@ -11,14 +12,18 @@
 #include <QToolBar>
 #include <QToolButton>
 #include <QMenuBar>
+#include <QLabel>
+#include <QtMultimedia/QMediaPlayer>
+#include <QDialog>
+#include <QInputDialog>
+#include <QMessageBox>
 
 // FMOD
 /*#include <conio.h>
 #include "inc/fmod.h"*/
 
-void onPlay(); void onNext(); void onPrevious(); void onPause(); void open();
-int main(int argc, char *argv[])
-{
+void onPlay(); void onNext(); void onPrevious(); void onPause(); void open(); void setVolume();
+int main(int argc, char *argv[]) {
     // application
     QApplication app(argc, argv);
     app.setOrganizationDomain("slshptt.vercel.app");
@@ -33,7 +38,15 @@ int main(int argc, char *argv[])
 
     // toolbar
     QToolBar *toolbar = new QToolBar;
-    toolbar->addAction("Open");
+
+    QAction *openmusic = new QAction("Open");
+    QAction *viewmusic = new QAction("View playlist");
+    QAction *asetv = new QAction("Set volume");
+
+    toolbar->addAction(openmusic);
+    toolbar->addAction(viewmusic);
+    toolbar->addSeparator();
+    toolbar->addAction(asetv);
 
     // icons
     QIcon iforward = QIcon::fromTheme("media-skip-forward");
@@ -47,59 +60,100 @@ int main(int argc, char *argv[])
     app.setWindowIcon(iicon);
 
     // buttons
-    QPushButton *prev = new QPushButton(ibackward, "");
-    QPushButton *play = new QPushButton(iplay, "");
-    QPushButton *next = new QPushButton(iforward, "");
+    QPushButton *bprev = new QPushButton(ibackward, "");
+    QPushButton *bplay = new QPushButton(iplay, "");
+    QPushButton *bnext = new QPushButton(iforward, "");
 
-    QPushButton *placeholder = new QPushButton("placeholder");
+    // image
+    QLabel *songimage = new QLabel();
+    QImage tmpimage;
+    tmpimage.load("/home/user/test.png");
+
+    QImage image = tmpimage.scaled(QSize(250, 250));
+    songimage->setPixmap(QPixmap::fromImage(image));
+
+    // labels
+    QFont big;
+    big.setPointSize(14);
+
+    QLabel *songname = new QLabel();
+    songname->setText("testo songo");
+    songname->setAlignment(Qt::AlignCenter);
+    songname->setFont(big);
+    songname->setFixedWidth(250);
+
+    QLabel *songauthor = new QLabel();
+    songauthor->setText("potatiotato");
+    songauthor->setAlignment(Qt::AlignCenter);
+    songauthor->setFixedWidth(250);
 
     // connecting
-    QObject::connect(prev, &QPushButton::clicked, onPrevious);
-    QObject::connect(play, &QPushButton::clicked, onPlay);
-    QObject::connect(next, &QPushButton::clicked, onNext);
+    QObject::connect(bprev, &QPushButton::clicked, onPrevious);
+    QObject::connect(bplay, &QPushButton::clicked, onPlay);
+    QObject::connect(bnext, &QPushButton::clicked, onNext);
+    QObject::connect(asetv, &QAction::triggered, setVolume);
+
+    // player
+    /*auto player = new QMediaPlayer;
+    auto audioOutput = new QAudioOutput;
+    player->setAudioOutput(audioOutput);
+    connect(player, SIGNAL(positionChanged(qint64)), this, SLOT(positionChanged(qint64)));
+    player->setSource(QUrl::fromLocalFile("/home/user/marble/Music/Medlyak.mp3"));
+    audioOutput->setVolume(50);
+    player->play();*/
 
     // layout
-    QHBoxLayout *playout = new QHBoxLayout(widget); // for padding
+    QHBoxLayout *playout = new QHBoxLayout(widget); // for hpadding
+    QVBoxLayout *vlayout = new QVBoxLayout; // for vpadding
+    QGridLayout *glayout = new QGridLayout; // for grid
     playout->setMenuBar(toolbar);
 
-    QGridLayout *glayout = new QGridLayout; // for grid
+    // do hpadding
+    playout->addStretch(1);
+    playout->addLayout(vlayout);
     playout->addStretch(1);
 
-    playout->addLayout(glayout);
+    // do vpadding
+    vlayout->addStretch(1);
+    vlayout->addLayout(glayout);
+    vlayout->addStretch(1);
 
-    glayout->addWidget(placeholder, 0, 0, 1, 3);
-    glayout->addWidget(prev, 1, 0);
-    glayout->addWidget(play, 1, 1);
-    glayout->addWidget(next, 1, 2);
+    // add main widgets
+    glayout->addWidget(bprev, 1, 0);
+    glayout->addWidget(bplay, 1, 1);
+    glayout->addWidget(bnext, 1, 2);
 
-    playout->addStretch(1);
+    glayout->addWidget(songimage, 0, 0, 1, 3);
+    glayout->addWidget(songname, 2, 0, 1, 3);
+    glayout->addWidget(songauthor, 3, 0, 1, 3);
 
     // run app
     widget->show();
     return app.exec();
 }
 
-void onPlay()
-{
+void onPlay() {
     QMessageBox msgBox;
     msgBox.setText("play");
     msgBox.exec();
 }
-void onNext()
-{
+void onNext() {
     QMessageBox msgBox;
     msgBox.setText("next");
     msgBox.exec();
 }
-void onPrevious()
-{
+void onPrevious() {
     QMessageBox msgBox;
     msgBox.setText("previous");
     msgBox.exec();
 }
-void onPause()
-{
+void onPause() {
     QMessageBox msgBox;
     msgBox.setText("pause");
     msgBox.exec();
+}
+
+void setVolume() {
+    QInputDialog *dialog = new QInputDialog();
+    dialog->show();
 }
