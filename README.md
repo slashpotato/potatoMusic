@@ -11,6 +11,6 @@ make
 ./potatoMusic
 ```
 ## install
-Run `make install` afrer building
+Run `make install` afrer building to install. `make uninstall` to uninstall
 ## license
 potatoMusic © 2024 by slashpotato is licensed under CC BY-NC-SA 4.0 
