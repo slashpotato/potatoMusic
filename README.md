@@ -1,7 +1,7 @@
 # potatoMusic
 An qt music player for linux
 
-## building
+## build
 Run `build.sh`
 
 #### **or**
