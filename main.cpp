@@ -14,7 +14,6 @@
 #include <QMenuBar>
 #include <QLabel>
 #include <QtMultimedia/QMediaPlayer>
-#include <QDialog>
 #include <QInputDialog>
 #include <QMessageBox>
 
@@ -36,6 +35,16 @@ int main(int argc, char *argv[]) {
     widget->setMinimumWidth(350);
     widget->setMinimumHeight(150);
 
+    // icons
+    QIcon iforward = QIcon::fromTheme("media-skip-forward");
+    QIcon ibackward = QIcon::fromTheme("media-skip-backward");
+    QIcon ipause = QIcon::fromTheme("media-playback-pause");
+    QIcon iplay = QIcon::fromTheme("media-playback-start");
+    QIcon iicon = QIcon::fromTheme("audio-headphones");
+    QIcon ivolume = QIcon::fromTheme("audio-volume-high");
+    QIcon iopen = QIcon::fromTheme("document-open");
+    QIcon ilist = QIcon::fromTheme("view-list");
+
     // toolbar
     QToolBar *toolbar = new QToolBar;
 
@@ -43,17 +52,15 @@ int main(int argc, char *argv[]) {
     QAction *viewmusic = new QAction("View playlist");
     QAction *asetv = new QAction("Set volume");
 
+    openmusic->setIcon(iopen);
+    viewmusic->setIcon(ilist);
+    asetv->setIcon(ivolume);
+
     toolbar->addAction(openmusic);
     toolbar->addAction(viewmusic);
     toolbar->addSeparator();
     toolbar->addAction(asetv);
 
-    // icons
-    QIcon iforward = QIcon::fromTheme("media-skip-forward");
-    QIcon ibackward = QIcon::fromTheme("media-skip-backward");
-    QIcon ipause = QIcon::fromTheme("media-playback-pause");
-    QIcon iplay = QIcon::fromTheme("media-playback-start");
-    QIcon iicon = QIcon::fromTheme("audio-headphones");
 
     // app icon
     widget->setWindowIcon(iicon);
@@ -94,13 +101,22 @@ int main(int argc, char *argv[]) {
     QObject::connect(asetv, &QAction::triggered, setVolume);
 
     // player
-    /*auto player = new QMediaPlayer;
+   /*auto player = new QMediaPlayer;
     auto audioOutput = new QAudioOutput;
     player->setAudioOutput(audioOutput);
     connect(player, SIGNAL(positionChanged(qint64)), this, SLOT(positionChanged(qint64)));
-    player->setSource(QUrl::fromLocalFile("/home/user/marble/Music/Medlyak.mp3"));
+    player->setSource(QUrl::fromLocalFile("/home/user/Music/Medlyak.mp3"));
     audioOutput->setVolume(50);
     player->play();*/
+
+    //QMediaPlayer player;
+    //QAudioOutput audioOutput; // chooses the default audio routing
+    //player.setAudioOutput(&audioOutput);
+    //player.setSource(QUrl::fromLocalFile("/home/user/Music/Medlyak.mp3"));
+    //audioOutput.setVolume(50);
+    //player.play();
+
+
 
     // layout
     QHBoxLayout *playout = new QHBoxLayout(widget); // for hpadding
