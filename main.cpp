@@ -16,12 +16,14 @@
 #include <QtMultimedia/QMediaPlayer>
 #include <QInputDialog>
 #include <QMessageBox>
+#include <QAudioOutput>
+#include <QFileDialog>
+#include <QDebug>
 
-// FMOD
-/*#include <conio.h>
-#include "inc/fmod.h"*/
+QMediaPlayer* player = nullptr;
+QAudioOutput* audioOutput = nullptr;
 
-void onPlay(); void onNext(); void onPrevious(); void onPause(); void open(); void setVolume();
+void onPlay(); void onNext(); void onPrevious(); void onPause(); void open(); void setVolume(); void open();
 int main(int argc, char *argv[]) {
     // application
     QApplication app(argc, argv);
@@ -61,7 +63,6 @@ int main(int argc, char *argv[]) {
     toolbar->addSeparator();
     toolbar->addAction(asetv);
 
-
     // app icon
     widget->setWindowIcon(iicon);
     app.setWindowIcon(iicon);
@@ -94,29 +95,20 @@ int main(int argc, char *argv[]) {
     songauthor->setAlignment(Qt::AlignCenter);
     songauthor->setFixedWidth(250);
 
+    // player
+    player = new QMediaPlayer;
+    audioOutput = new QAudioOutput; // chooses the default audio routing
+    player->setAudioOutput(audioOutput);
+    //player.setSource(QUrl::fromLocalFile("/home/user/Music/Medlyak.mp3"));
+    audioOutput->setVolume(50);
+    //player->play();
+
     // connecting
     QObject::connect(bprev, &QPushButton::clicked, onPrevious);
     QObject::connect(bplay, &QPushButton::clicked, onPlay);
     QObject::connect(bnext, &QPushButton::clicked, onNext);
     QObject::connect(asetv, &QAction::triggered, setVolume);
-
-    // player
-   /*auto player = new QMediaPlayer;
-    auto audioOutput = new QAudioOutput;
-    player->setAudioOutput(audioOutput);
-    connect(player, SIGNAL(positionChanged(qint64)), this, SLOT(positionChanged(qint64)));
-    player->setSource(QUrl::fromLocalFile("/home/user/Music/Medlyak.mp3"));
-    audioOutput->setVolume(50);
-    player->play();*/
-
-    //QMediaPlayer player;
-    //QAudioOutput audioOutput; // chooses the default audio routing
-    //player.setAudioOutput(&audioOutput);
-    //player.setSource(QUrl::fromLocalFile("/home/user/Music/Medlyak.mp3"));
-    //audioOutput.setVolume(50);
-    //player.play();
-
-
+    QObject::connect(openmusic, &QAction::triggered, open);
 
     // layout
     QHBoxLayout *playout = new QHBoxLayout(widget); // for hpadding
@@ -148,6 +140,7 @@ int main(int argc, char *argv[]) {
     return app.exec();
 }
 
+// media buttons
 void onPlay() {
     QMessageBox msgBox;
     msgBox.setText("play");
@@ -169,8 +162,22 @@ void onPause() {
     msgBox.exec();
 }
 
+// action buttons
 void setVolume() {
     QInputDialog *dialog = new QInputDialog();
     dialog->setWindowTitle("0-100");
     dialog->show();
+    //audioOutput->setVolume(dialog->result());
+}
+void open() {
+    QFileDialog dialog;
+    dialog.setFileMode(QFileDialog::AnyFile);
+    dialog.setViewMode(QFileDialog::Detail);
+    QStringList fileNames;
+    if (dialog.exec())
+        fileNames = dialog.selectedFiles();
+
+    qDebug() << fileNames.first();
+    player->setSource(fileNames.first());
+    player->play();
 }
