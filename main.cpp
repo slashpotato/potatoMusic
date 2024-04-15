@@ -42,7 +42,7 @@ int main(int argc, char *argv[]) {
     QIcon iplay = QIcon::fromTheme("media-playback-start");
     QIcon iicon = QIcon::fromTheme("audio-headphones");
     QIcon ivolume = QIcon::fromTheme("audio-volume-high");
-    QIcon iopen = QIcon::fromTheme("document-open");
+    QIcon iopen = QIcon::fromTheme("folder-saved-search");
     QIcon ilist = QIcon::fromTheme("view-list");
 
     // toolbar
