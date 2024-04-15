@@ -57,6 +57,10 @@ int main(int argc, char *argv[]) {
     viewmusic->setIcon(ilist);
     asetv->setIcon(ivolume);
 
+    openmusic->setToolTip("Open file");
+    viewmusic->setToolTip("View playlist");
+    asetv->setToolTip("Set player volume (0-100)");
+
     toolbar->addAction(openmusic);
     toolbar->addAction(viewmusic);
     toolbar->addSeparator();
@@ -74,7 +78,7 @@ int main(int argc, char *argv[]) {
     // image
     QLabel *songimage = new QLabel();
     QImage tmpimage;
-    tmpimage.load("/home/user/test.png");
+    tmpimage.load(":/test.png");
 
     QImage image = tmpimage.scaled(QSize(250, 250));
     songimage->setPixmap(QPixmap::fromImage(image));
@@ -98,9 +102,7 @@ int main(int argc, char *argv[]) {
     player = new QMediaPlayer;
     audioOutput = new QAudioOutput; // chooses the default audio routing
     player->setAudioOutput(audioOutput);
-    //player.setSource(QUrl::fromLocalFile("/home/user/Music/Medlyak.mp3"));
-    audioOutput->setVolume(50);
-    //player->play();
+    audioOutput->setVolume(1);
 
     // connecting
     QObject::connect(bprev, &QPushButton::clicked, onPrevious);
@@ -163,19 +165,22 @@ void onPause() {
 
 // action buttons
 void setVolume() {
-    QInputDialog *dialog = new QInputDialog();
-    dialog->setWindowTitle("0-100");
-    dialog->show();
-    //audioOutput->setVolume(dialog->result());
+    bool ok;
+    int min = 0, max = 100, value = 100, step = 1;
+    float value_int = QInputDialog::getInt(nullptr, "0-100", "Enter new volume:", value, min, max, step, &ok);
+    float res = value_int / 100;
+    qDebug() << res;
+    audioOutput->setVolume(res);
 }
 void open() {
     QFileDialog dialog;
     dialog.setFileMode(QFileDialog::AnyFile);
     dialog.setViewMode(QFileDialog::Detail);
     QStringList fileNames;
-    if (dialog.exec())
+    if (dialog.exec()) {
         fileNames = dialog.selectedFiles();
-
-    player->setSource(fileNames.first());
-    player->play();
+        //player->stop();
+        player->setSource(fileNames.first());
+        player->play();
+    };
 }

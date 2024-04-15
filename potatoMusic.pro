@@ -1,6 +1,6 @@
 QT += core widgets gui multimedia
 
-greaterThan(QT_MAJOR_VERSION, 6): QT += widgets
+greaterThan(QT_MAJOR_VERSION, 6): QT += widgets multimedia
 
 CONFIG += c++17
 
