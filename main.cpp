@@ -18,7 +18,6 @@
 #include <QMessageBox>
 #include <QAudioOutput>
 #include <QFileDialog>
-#include <QDebug>
 
 QMediaPlayer* player = nullptr;
 QAudioOutput* audioOutput = nullptr;
@@ -177,7 +176,6 @@ void open() {
     if (dialog.exec())
         fileNames = dialog.selectedFiles();
 
-    qDebug() << fileNames.first();
     player->setSource(fileNames.first());
     player->play();
 }
