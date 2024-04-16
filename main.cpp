@@ -23,9 +23,9 @@
 #include <taglib/fileref.h>
 #include <taglib/mpegfile.h>
 #include <taglib/flacfile.h>
-//#include <taglib/opusfile.h>
-//#include <taglib/oggfile.h>
-//#include <taglib/wavfile.h>
+#include <taglib/opusfile.h>
+#include <taglib/oggfile.h>
+#include <taglib/wavfile.h>
 #include <taglib/id3v2tag.h>
 #include <taglib/id3v2frame.h>
 #include <taglib/attachedpictureframe.h>
