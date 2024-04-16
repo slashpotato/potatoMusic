@@ -21,8 +21,11 @@
 
 QMediaPlayer* player = nullptr;
 QAudioOutput* audioOutput = nullptr;
+QPushButton* bplay = nullptr;
 
-void onPlay(); void onNext(); void onPrevious(); void onPause(); void open(); void setVolume(); void open();
+bool nowPaused = false;
+
+void onNext(); void onPrevious(); void onPause(); void open(); void setVolume(); void open();
 int main(int argc, char *argv[]) {
     // application
     QApplication app(argc, argv);
@@ -72,7 +75,7 @@ int main(int argc, char *argv[]) {
 
     // buttons
     QPushButton *bprev = new QPushButton(ibackward, "");
-    QPushButton *bplay = new QPushButton(iplay, "");
+    bplay = new QPushButton(iplay, "");
     QPushButton *bnext = new QPushButton(iforward, "");
 
     // image
@@ -106,7 +109,7 @@ int main(int argc, char *argv[]) {
 
     // connecting
     QObject::connect(bprev, &QPushButton::clicked, onPrevious);
-    QObject::connect(bplay, &QPushButton::clicked, onPlay);
+    QObject::connect(bplay, &QPushButton::clicked, onPause);
     QObject::connect(bnext, &QPushButton::clicked, onNext);
     QObject::connect(asetv, &QAction::triggered, setVolume);
     QObject::connect(openmusic, &QAction::triggered, open);
@@ -142,11 +145,6 @@ int main(int argc, char *argv[]) {
 }
 
 // media buttons
-void onPlay() {
-    QMessageBox msgBox;
-    msgBox.setText("play");
-    msgBox.exec();
-}
 void onNext() {
     QMessageBox msgBox;
     msgBox.setText("next");
@@ -158,9 +156,18 @@ void onPrevious() {
     msgBox.exec();
 }
 void onPause() {
-    QMessageBox msgBox;
-    msgBox.setText("pause");
-    msgBox.exec();
+    QIcon ipause = QIcon::fromTheme("media-playback-pause");
+    QIcon iplay = QIcon::fromTheme("media-playback-start");
+
+    if (nowPaused == true) {
+        player->play();
+        bplay->setIcon(ipause);
+        nowPaused = false;
+    } else {
+        player->pause();
+        bplay->setIcon(iplay);
+        nowPaused = true;
+    }
 }
 
 // action buttons
@@ -169,7 +176,6 @@ void setVolume() {
     int min = 0, max = 100, value = 100, step = 1;
     float value_int = QInputDialog::getInt(nullptr, "0-100", "Enter new volume:", value, min, max, step, &ok);
     float res = value_int / 100;
-    qDebug() << res;
     audioOutput->setVolume(res);
 }
 void open() {
@@ -181,6 +187,8 @@ void open() {
         fileNames = dialog.selectedFiles();
         //player->stop();
         player->setSource(fileNames.first());
-        player->play();
+    };
+    if (nowPaused == false) {
+        onPause();
     };
 }

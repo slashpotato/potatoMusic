@@ -1,6 +1,6 @@
 #!/bin/bash
 
-qmake
+qmake6
 make
 
 ./potatoMusic
