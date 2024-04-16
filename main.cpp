@@ -1,31 +1,43 @@
 #include "mainwindow.h"
 
-// qt elements
+// qt
 #include <QApplication>
 #include <QWidget>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QGridLayout>
 #include <QPushButton>
-#include <QMessageBox>
 #include <QIcon>
 #include <QToolBar>
-#include <QToolButton>
-#include <QMenuBar>
 #include <QLabel>
 #include <QtMultimedia/QMediaPlayer>
 #include <QInputDialog>
-#include <QMessageBox>
 #include <QAudioOutput>
 #include <QFileDialog>
+#include <QMessageBox>
+#include <QPixmap>
 
+// taglib
+#include <taglib/tag.h>
+#include <taglib/fileref.h>
+#include <taglib/mpegfile.h>
+#include <taglib/id3v2tag.h>
+#include <taglib/id3v2frame.h>
+#include <taglib/attachedpictureframe.h>
+
+// defining global elements
 QMediaPlayer* player = nullptr;
 QAudioOutput* audioOutput = nullptr;
 QPushButton* bplay = nullptr;
+QImage* songimage = nullptr;
+QImage* tmpimage = nullptr;
+QLabel *songImageLabel = nullptr;
 
 bool nowPaused = false;
 
 void onNext(); void onPrevious(); void onPause(); void open(); void setVolume(); void open();
+
+// main
 int main(int argc, char *argv[]) {
     // application
     QApplication app(argc, argv);
@@ -79,25 +91,20 @@ int main(int argc, char *argv[]) {
     QPushButton *bnext = new QPushButton(iforward, "");
 
     // image
-    QLabel *songimage = new QLabel();
-    QImage tmpimage;
-    tmpimage.load(":/test.png");
-
-    QImage image = tmpimage.scaled(QSize(250, 250));
-    songimage->setPixmap(QPixmap::fromImage(image));
+    songImageLabel = new QLabel;
 
     // labels
     QFont big;
     big.setPointSize(14);
 
     QLabel *songname = new QLabel();
-    songname->setText("testo songo");
+    songname->setText("title");
     songname->setAlignment(Qt::AlignCenter);
     songname->setFont(big);
     songname->setFixedWidth(250);
 
     QLabel *songauthor = new QLabel();
-    songauthor->setText("potatiotato");
+    songauthor->setText("author");
     songauthor->setAlignment(Qt::AlignCenter);
     songauthor->setFixedWidth(250);
 
@@ -135,7 +142,7 @@ int main(int argc, char *argv[]) {
     glayout->addWidget(bplay, 1, 1);
     glayout->addWidget(bnext, 1, 2);
 
-    glayout->addWidget(songimage, 0, 0, 1, 3);
+    glayout->addWidget(songImageLabel, 0, 0, 1, 3);
     glayout->addWidget(songname, 2, 0, 1, 3);
     glayout->addWidget(songauthor, 3, 0, 1, 3);
 
@@ -150,11 +157,13 @@ void onNext() {
     msgBox.setText("next");
     msgBox.exec();
 }
+
 void onPrevious() {
     QMessageBox msgBox;
     msgBox.setText("previous");
     msgBox.exec();
 }
+
 void onPause() {
     QIcon ipause = QIcon::fromTheme("media-playback-pause");
     QIcon iplay = QIcon::fromTheme("media-playback-start");
@@ -173,22 +182,41 @@ void onPause() {
 // action buttons
 void setVolume() {
     bool ok;
-    int min = 0, max = 100, value = 100, step = 1;
+    int min = 0, max = 100, value = 100, step = 10;
     float value_int = QInputDialog::getInt(nullptr, "0-100", "Enter new volume:", value, min, max, step, &ok);
     float res = value_int / 100;
     audioOutput->setVolume(res);
 }
+
 void open() {
     QFileDialog dialog;
-    dialog.setFileMode(QFileDialog::AnyFile);
+    dialog.setFileMode(QFileDialog::ExistingFile);
     dialog.setViewMode(QFileDialog::Detail);
-    QStringList fileNames;
+    dialog.setNameFilters({"Audio Files (*.mp3 *.ogg *.wav *.flac *.opus *.aac *.m4a *.mid *.midi)", "Any files (*)"});
+
     if (dialog.exec()) {
-        fileNames = dialog.selectedFiles();
-        //player->stop();
-        player->setSource(fileNames.first());
-    };
-    if (nowPaused == false) {
+        QStringList fileNames = dialog.selectedFiles();
+        QString filePath = fileNames.first();
+        player->setSource(filePath);
+
+        // Получение изображения альбома используя TagLib API
+        TagLib::MPEG::File file(filePath.toStdString().c_str());
+        TagLib::ID3v2::Tag *tag = file.ID3v2Tag();
+        TagLib::ID3v2::FrameList frameList = tag->frameListMap()["APIC"];
+        if (!frameList.isEmpty()) {
+            TagLib::ID3v2::AttachedPictureFrame *coverImg = dynamic_cast<TagLib::ID3v2::AttachedPictureFrame *>(frameList.front());
+            if (coverImg) {
+                QByteArray imageData(coverImg->picture().data(), coverImg->picture().size());
+                QPixmap pixmap;
+                pixmap.loadFromData(imageData);
+                if (!pixmap.isNull()) {
+                    songImageLabel->setPixmap(pixmap.scaled(200, 200, Qt::KeepAspectRatio));
+                }
+            }
+        }
+    }
+
+    if (nowPaused) {
         onPause();
-    };
+    }
 }

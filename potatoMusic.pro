@@ -2,7 +2,7 @@ QT += core widgets gui multimedia
 
 greaterThan(QT_MAJOR_VERSION, 6): QT += widgets multimedia
 
-CONFIG += c++17
+CONFIG += c++17 taglib
 
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -17,6 +17,9 @@ HEADERS += \
 
 FORMS += \
     mainwindow.ui
+
+INCLUDEPATH += $$system(pkg-config --cflags taglib)
+LIBS += $$system(pkg-config --libs taglib)
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
