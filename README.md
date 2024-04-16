@@ -2,6 +2,7 @@
 An qt music player for linux
 
 ![screenshot1](https://github.com/slashpotato/potatoMusic/blob/master/screenshot1.png?raw=true)
+theme used: catppuccin mocha lavender
 ## dependencies 
 - qt6
 - qt6-multimedia
