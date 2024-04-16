@@ -1,6 +1,4 @@
 #!/bin/bash
 
 qmake6 || qmake-qt6
-make
-
-./potatoMusic
+make --jobs=$(grep -c ^processor /proc/cpuinfo)
