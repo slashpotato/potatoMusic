@@ -1,6 +1,10 @@
 # potatoMusic
 An qt music player for linux
 
+## dependencies 
+- qt6
+- qt6-multimedia
+- libtag
 ## build
 Run `build.sh`
 
