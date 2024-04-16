@@ -1,5 +1,6 @@
 # potatoMusic
 An qt music player for linux
+
 ![screenshot1](https://github.com/slashpotato/potatoMusic/blob/master/screenshot1.png?raw=true)
 ## dependencies 
 - qt6
