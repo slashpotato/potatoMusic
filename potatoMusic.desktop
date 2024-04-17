@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=0.1.2
+Type=Application
+Name=potatoMusic
+GenericName=Music Player
+Comment=An qt music player for linux
+Exec=/opt/potatoMusic/bin/potatoMusic
+Icon=
+Categories=Audio;Music;Player;
+Terminal=false
