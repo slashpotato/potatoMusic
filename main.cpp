@@ -151,7 +151,6 @@ void onPrevious();
 void onPause();
 void open();
 void setVolume();
-void open();
 void ohelp();
 void opref();
 void viewMusic();
