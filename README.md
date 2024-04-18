@@ -1,8 +1,11 @@
 # potatoMusic
-An qt music player for linux
+<marquee>An qt music player for linux </marquee>
 
 ![screenshot1](https://github.com/slashpotato/potatoMusic/blob/master/screenshot1.png?raw=true)
-theme used: catppuccin mocha lavender
+
+theme used: [catppuccin mocha lavender](https://github.com/catppuccin/kde)
+
+icons user: [papirus](https://github.com/PapirusDevelopmentTeam/papirus-icon-theme) (recommended)
 ## dependencies 
 - qt6
 - qt6-multimedia
