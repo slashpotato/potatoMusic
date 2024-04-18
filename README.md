@@ -18,10 +18,9 @@ Run `build.sh`
 ```shell
 qmake
 make
-./potatoMusic
 ```
 ### run
-Run `./potatoMusic`
+Run `./potatoMusic` after building
 ### install
 Run `make install` afrer building to install. `make uninstall` to uninstall
 ## license
