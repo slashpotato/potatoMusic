@@ -1,1 +1,1 @@
-rm -rf main.o mainwindow.o moc_mainwindow.cpp moc_mainwindow.o moc_predefs.h potatoMusic
+rm -rf main.o mainwindow.o moc_mainwindow.cpp moc_mainwindow.o moc_predefs.h ui_mainwindow.h potatoMusic
