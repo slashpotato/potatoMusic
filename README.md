@@ -3,9 +3,9 @@
 
 ![screenshot1](https://github.com/slashpotato/potatoMusic/blob/master/screenshot1.png?raw=true)
 
-theme used: [catppuccin mocha lavender](https://github.com/catppuccin/kde)
+theme used on screenshot: [catppuccin mocha lavender](https://github.com/catppuccin/kde)
 
-icons user: [papirus](https://github.com/PapirusDevelopmentTeam/papirus-icon-theme) (recommended)
+icons user on screenshot: [papirus](https://github.com/PapirusDevelopmentTeam/papirus-icon-theme) (recommended)
 ## dependencies 
 - qt6
 - qt6-multimedia
