@@ -17,7 +17,12 @@ Run `build.sh`
 #### **or**
 ```shell
 qmake
+<<<<<<< HEAD
 make
+=======
+make --jobs=$(grep -c ^processor /proc/cpuinfo)
+./potatoMusic
+>>>>>>> b08e5ec (updated readme for faster build guide)
 ```
 ### run
 Run `./potatoMusic` after building
