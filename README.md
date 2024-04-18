@@ -19,6 +19,8 @@ qmake
 make
 ./potatoMusic
 ```
+## run
+Run `./potatoMusic`
 ## install
 Run `make install` afrer building to install. `make uninstall` to uninstall
 ## license
