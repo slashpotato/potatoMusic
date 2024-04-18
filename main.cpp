@@ -1,5 +1,7 @@
 #include "mainwindow.h"
 #include <queue>
+#include <iostream>
+#include "discord-files/discord.h"
 
 // qt
 #include <QApplication>
@@ -39,6 +41,9 @@
 #include <taglib/wavfile.h>
 #include <taglib/mp4file.h>
 #include <taglib/opusfile.h>
+#include <taglib/mp4file.h>
+#include <taglib/mp4tag.h>
+#include <taglib/mp4coverart.h>
 
 // version
 QString version = "0.3.5";
@@ -462,7 +467,7 @@ void play(const QString &filePath)
             songname->setText(title);
             songauthor->setText(artist);
 
-            TagLib::PropertyMap properties = tag->properties();
+            const TagLib::PropertyMap properties = tag->properties();
             if (properties.contains("WM/Picture"))
             {
                 TagLib::String pictureData = properties["WM/Picture"].toString();
