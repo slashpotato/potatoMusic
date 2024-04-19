@@ -16,7 +16,7 @@ Run `build.sh`
 
 #### **or**
 ```shell
-qmake
+qmake6
 make --jobs=$(grep -c ^processor /proc/cpuinfo)
 ```
 ### run

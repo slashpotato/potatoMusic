@@ -26,6 +26,8 @@
 #include <QDialogButtonBox>
 #include <QFont>
 #include <QDirIterator>
+#include <QSystemTrayIcon>
+#include <QMenu>
 
 // taglib
 #include <taglib/tag.h>
@@ -212,7 +214,7 @@ int main(int argc, char *argv[])
     widget->setMinimumHeight(150);
 
     fbig.setPointSize(19);
-    fmed.setPointSize(17);
+    fmed.setPointSize(14);
 
     // icons
     QIcon iforward = QIcon::fromTheme("media-skip-forward");
@@ -269,6 +271,10 @@ int main(int argc, char *argv[])
     QPushButton *bprev = new QPushButton(ibackward, "");
     bplay = new QPushButton(iplay, "");
     QPushButton *bnext = new QPushButton(iforward, "");
+    bprev->setShortcut(QKeySequence(Qt::Key_MediaPrevious));
+    bplay->setShortcut(QKeySequence(Qt::Key_Space));
+    bnext->setShortcut(QKeySequence(Qt::Key_MediaNext));
+    bplay->setShortcut(QKeySequence(Qt::Key_MediaTogglePlayPause));
 
     // image
     songImageLabel = new QLabel;
@@ -301,6 +307,17 @@ int main(int argc, char *argv[])
     slider->setMinimum(0);
     slider->setMaximum(100);
     slider->setValue(0);
+
+    // tray
+    QSystemTrayIcon *trayIcon = new QSystemTrayIcon(widget);
+    trayIcon->setIcon(QIcon::fromTheme("headphones-symbolic")); // Установите иконку из ресурсов
+    trayIcon->show();
+
+    QMenu *trayMenu = new QMenu(widget);
+    QAction *playPauseAction = new QAction("Play/Pause", widget);
+    QObject::connect(playPauseAction, &QAction::triggered, bplay, &QPushButton::click);
+    trayMenu->addAction(playPauseAction);
+    trayIcon->setContextMenu(trayMenu);
 
     // connecting
     QObject::connect(bprev, &QPushButton::clicked, onPrevious);
