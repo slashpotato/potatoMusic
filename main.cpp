@@ -141,6 +141,8 @@ QSlider* createSlider(QWidget *parent) {
 QMediaPlayer *player = nullptr;
 QAudioOutput *audioOutput = nullptr;
 QPushButton *bplay = nullptr;
+QPushButton *bmix = nullptr;
+QPushButton *bcon = nullptr;
 QImage *songimage = nullptr;
 QImage *tmpimage = nullptr;
 QLabel *songImageLabel = nullptr;
