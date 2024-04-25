@@ -28,6 +28,9 @@
 #include <QDirIterator>
 #include <QSystemTrayIcon>
 #include <QMenu>
+#include <QImage>
+#include <QByteArray>
+#include <QProcess>
 
 // taglib
 #include <taglib/tag.h>
@@ -48,7 +51,7 @@
 #include <taglib/mp4coverart.h>
 
 // version
-QString version = "0.3.5";
+QString version = "0.4";
 
 // deleted queue
 class RemovedTracksQueue {
@@ -187,7 +190,7 @@ void onPositionChanged(qint64 position) {
 
     QTime elapsedTime(0, 0);
     elapsedTime = elapsedTime.addMSecs(position);
-    elapsedTimeLabel->setText(elapsedTime.toString("m:ss"));
+    elapsedTimeLabel->setText(elapsedTime.toString("mm:ss"));
 
 
 
@@ -295,8 +298,8 @@ int main(int argc, char *argv[])
     songauthor->setFont(fmed);
     songauthor->setFixedWidth(thumbScale);
 
-    elapsedTimeLabel = new QLabel("0:00");
-    totalTimeLabel = new QLabel("0:00");
+    elapsedTimeLabel = new QLabel("00:00");
+    totalTimeLabel = new QLabel("00:00");
 
     // player
     player = new QMediaPlayer;
@@ -392,7 +395,30 @@ void onPause()
     }
 }
 
-// yeh... :/
+// get track meta with ffmpeg
+
+QPixmap extractCoverArt(const QString &filePath) {
+    QStringList args;
+    args << "-i" << filePath << "-an" << "-vcodec" << "copy" << "-f" << "image2pipe" << "-";
+
+    QProcess process;
+    process.start("ffmpeg", args);
+    process.waitForFinished();
+
+    QByteArray imageData = process.readAllStandardOutput();
+    QImage image = QImage::fromData(imageData);
+
+    if (image.isNull()) {
+        // Если не удалось извлечь изображение, верните пустую картинку
+        return QPixmap();
+    }
+
+    // Масштабируйте изображение до нужного размера (thumbScale x thumbScale)
+    QPixmap pixmap = QPixmap::fromImage(image.scaled(thumbScale, thumbScale, Qt::KeepAspectRatio));
+    return pixmap;
+}
+
+// load ( and play ) track
 
 void play(const QString &filePath)
 {
@@ -414,6 +440,8 @@ void play(const QString &filePath)
     int seconds = secondsTotal % 60;
     QString timeString = QString("%1:%2").arg(minutes, 2, 10, QChar('0')).arg(seconds, 2, 10, QChar('0'));
     totalTimeLabel->setText(timeString);
+
+    // image. p.s. i hate this part i spent most time on it
 
     if (ext == "mp3")
     {
@@ -486,7 +514,7 @@ void play(const QString &filePath)
             songname->setText(title);
             songauthor->setText(artist);
 
-            const TagLib::PropertyMap properties = tag->properties();
+            /*const TagLib::PropertyMap properties = tag->properties();
             if (properties.contains("WM/Picture"))
             {
                 TagLib::String pictureData = properties["WM/Picture"].toString();
@@ -497,6 +525,13 @@ void play(const QString &filePath)
                 {
                     songImageLabel->setPixmap(pixmap.scaled(thumbScale, thumbScale, Qt::KeepAspectRatio));
                 }
+            }*/
+
+            QPixmap coverArt = extractCoverArt(filePath);
+            if (!coverArt.isNull()) {
+                songImageLabel->setPixmap(coverArt.scaled(thumbScale, thumbScale, Qt::KeepAspectRatio));
+            } else {
+                songImageLabel->setText("No cover art available");
             }
         }
     }
