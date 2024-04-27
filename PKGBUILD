@@ -6,14 +6,14 @@ pkgrel=1
 pkgdesc="An qt music player for linux"
 arch=('x86_64')
 url="https://github.com/slashpotato/potatoMusic"
-license=('CC-BY-NC-SA 4.0')
+license=('CC-BY-NC-SA-4.0')
 depends=('qt6-base' 'ffmpeg' 'taglib' 'qt6-multimedia')
 
-source=("$url/archive/refs/tags/$pkgver.tar.gz")
+source=("$pkgname-$pkgver.tar.gz::$url/archive/$pkgver.tar.gz")
 
 build() {
   cd "$pkgname-$pkgver"
-  qmake
+  qmake6
   make
 }
 
