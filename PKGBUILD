@@ -1,7 +1,7 @@
 # Maintainer: slashpotato <slashpotato@duck.com>
 
 pkgname=potatoMusic
-pkgver=0.3.5
+pkgver=0.4
 pkgrel=1
 pkgdesc="An qt music player for linux"
 arch=('x86_64')
