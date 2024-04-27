@@ -11,6 +11,7 @@ icons user on screenshot: [papirus](https://github.com/PapirusDevelopmentTeam/pa
 - qt6-base
 - qt6-multimedia
 - taglib
+- ffmpeg
 ### build
 Run `build.sh`
 
