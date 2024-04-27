@@ -287,13 +287,13 @@ int main(int argc, char *argv[])
 
     // labels
     songname = new QLabel();
-    songname->setText("title");
+    songname->setText("title1111111111111111111111111111111111111111111111");
     songname->setAlignment(Qt::AlignCenter);
     songname->setFont(fbig);
     songname->setFixedWidth(thumbScale);
 
     songauthor = new QLabel();
-    songauthor->setText("author");
+    songauthor->setText("author1111111111111111111111111111111111111111111111");
     songauthor->setAlignment(Qt::AlignCenter);
     songauthor->setFont(fmed);
     songauthor->setFixedWidth(thumbScale);
@@ -503,7 +503,7 @@ void play(const QString &filePath)
         songname->setText(title);
         songauthor->setText(artist);
     }
-    else if (ext == "ogg" || ext == "wav" || ext == "m4a" || ext == "opus")
+    else
     {
         TagLib::FileRef fileRef(filePath.toUtf8().constData());
         if (!fileRef.isNull() && fileRef.tag())
@@ -514,19 +514,6 @@ void play(const QString &filePath)
             songname->setText(title);
             songauthor->setText(artist);
 
-            /*const TagLib::PropertyMap properties = tag->properties();
-            if (properties.contains("WM/Picture"))
-            {
-                TagLib::String pictureData = properties["WM/Picture"].toString();
-                QString pictureDataQString = QString::fromStdString(pictureData.to8Bit(true).data());
-                QPixmap pixmap;
-                pixmap.loadFromData(reinterpret_cast<const uchar *>(pictureDataQString.toUtf8().constData()), pictureDataQString.length());
-                if (!pixmap.isNull())
-                {
-                    songImageLabel->setPixmap(pixmap.scaled(thumbScale, thumbScale, Qt::KeepAspectRatio));
-                }
-            }*/
-
             QPixmap coverArt = extractCoverArt(filePath);
             if (!coverArt.isNull()) {
                 songImageLabel->setPixmap(coverArt.scaled(thumbScale, thumbScale, Qt::KeepAspectRatio));
@@ -534,11 +521,6 @@ void play(const QString &filePath)
                 songImageLabel->setText("No cover art available");
             }
         }
-    }
-    else
-    {
-        QMessageBox::warning(nullptr, "Warning", "Unsupported file format: metadata won't be loaded, but most likely played."); // :)
-        return;
     }
 }
 
