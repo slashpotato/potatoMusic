@@ -8,9 +8,9 @@ theme used on screenshot: [catppuccin mocha lavender](https://github.com/catppuc
 icons user on screenshot: [papirus](https://github.com/PapirusDevelopmentTeam/papirus-icon-theme) (recommended)
 ## usage
 ### dependencies 
-- qt6
+- qt6-base
 - qt6-multimedia
-- libtag
+- taglib
 ### build
 Run `build.sh`
 
