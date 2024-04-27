@@ -10,7 +10,7 @@ license=('CC-BY-NC-SA-4.0')
 depends=('qt6-base' 'ffmpeg' 'taglib' 'qt6-multimedia')
 
 source=("$pkgname-$pkgver.tar.gz::$url/archive/$pkgver.tar.gz")
-sha256sums=('d560d6f3ab70f7073faacec686cb5ade32a31291ea6763cd4cbcc58a40d08a8c')
+sha256sums=('ca927dd237550c56fff6e6bc8e2ef93d5b47bac80160c5e7b8534ed663ba7ef2')
 
 build() {
   cd "$pkgname-$pkgver"

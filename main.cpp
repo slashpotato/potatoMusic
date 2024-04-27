@@ -51,7 +51,7 @@
 #include <taglib/mp4coverart.h>
 
 // version
-QString version = "0.4";
+QString version = "0.4.1";
 
 // deleted queue
 class RemovedTracksQueue {
@@ -165,9 +165,8 @@ void open();
 void setVolume();
 void ohelp();
 void opref();
-void viewMusic();
 void playNextTrack();
-void viewRemovedTracks();
+void viewTracks();
 
 // funs
 void setTrackPositionFun(int position) {
@@ -241,26 +240,24 @@ int main(int argc, char *argv[])
     QAction *asetv = new QAction("Set volume");
     QAction *tpref = new QAction("Preferences");
     QAction *thelp = new QAction("Help");
-    QAction *viewRemoved = new QAction("View Removed Tracks");
 
     openmusic->setIcon(iopen);
     viewmusic->setIcon(ilist);
     asetv->setIcon(ivolume);
     tpref->setIcon(imore);
     thelp->setIcon(ihelp);
-    viewRemoved->setIcon(QIcon::fromTheme("list-remove"));
 
     openmusic->setToolTip("Open file");
     viewmusic->setToolTip("View playlist");
     asetv->setToolTip("Set volume level");
     tpref->setToolTip("Preferences");
     thelp->setToolTip("Help");
-    viewRemoved->setToolTip("View removed playlist");
 
     toolbar->addAction(openmusic);
     toolbar->addAction(viewmusic);
-    toolbar->addAction(viewRemoved);
+
     toolbar->addSeparator();
+
     toolbar->addAction(asetv);
     toolbar->addAction(tpref);
     toolbar->addAction(thelp);
@@ -287,13 +284,13 @@ int main(int argc, char *argv[])
 
     // labels
     songname = new QLabel();
-    songname->setText("title1111111111111111111111111111111111111111111111");
+    songname->setText("title");
     songname->setAlignment(Qt::AlignCenter);
     songname->setFont(fbig);
     songname->setFixedWidth(thumbScale);
 
     songauthor = new QLabel();
-    songauthor->setText("author1111111111111111111111111111111111111111111111");
+    songauthor->setText("author");
     songauthor->setAlignment(Qt::AlignCenter);
     songauthor->setFont(fmed);
     songauthor->setFixedWidth(thumbScale);
@@ -332,10 +329,9 @@ int main(int argc, char *argv[])
     QObject::connect(tpref, &QAction::triggered, opref);
     QObject::connect(thelp, &QAction::triggered, ohelp);
     QObject::connect(openmusic, &QAction::triggered, open);
-    QObject::connect(viewmusic, &QAction::triggered, viewMusic);
+    QObject::connect(viewmusic, &QAction::triggered, viewTracks);
     QObject::connect(slider, &QSlider::sliderMoved, setTrackPositionFun);
     QObject::connect(player, &QMediaPlayer::positionChanged, onPositionChanged);
-    QObject::connect(viewRemoved, &QAction::triggered, viewRemovedTracks);
 
     // layout
     QHBoxLayout *playout = new QHBoxLayout(widget); // for hpadding
@@ -526,36 +522,65 @@ void play(const QString &filePath)
 
 void open()
 {
-    QFileDialog dialog;
-    dialog.setFileMode(QFileDialog::ExistingFiles); // Разрешить выбор как файлов, так и папок
-    dialog.setViewMode(QFileDialog::Detail);
-    dialog.setNameFilters({"Audio Files (*.mp3 *.ogg *.wav *.flac *.opus *.m4a)", "Any files (*)"});
+    QMenu menu;
+    QAction *openFilesAction = menu.addAction("Open Files");
+    QAction *openDirectoryAction = menu.addAction("Open Directory");
 
-    dialog.setOption(QFileDialog::DontUseNativeDialog, true);
-    dialog.setOption(QFileDialog::ReadOnly, true);
+    QAction *selectedAction = menu.exec(QCursor::pos());
 
-    if (dialog.exec())
+    if (selectedAction == openFilesAction)
     {
-        QStringList fileNames = dialog.selectedFiles();
-        musicQueue = MusicQueue();
+        // Обработка выбора "Open Files"
+        QFileDialog dialog;
+        dialog.setFileMode(QFileDialog::ExistingFiles); // Разрешить выбор как файлов, так и папок
+        dialog.setViewMode(QFileDialog::Detail);
+        dialog.setNameFilters({"Audio Files (*.mp3 *.ogg *.wav *.flac *.opus *.m4a)", "Any files (*)"});
 
-        for (const QString& fileName : fileNames)
+        dialog.setOption(QFileDialog::DontUseNativeDialog, true);
+        dialog.setOption(QFileDialog::ReadOnly, true);
+
+        if (dialog.exec())
         {
-            QFileInfo fileInfo(fileName);
-            if (fileInfo.isFile()) {
-                musicQueue.addToQueue(fileName);
-            } else if (fileInfo.isDir()) {
-                QDirIterator it(fileName, QStringList() << "*.mp3" << "*.ogg" << "*.wav" << "*.flac" << "*.opus" << "*.m4a", QDir::Files, QDirIterator::Subdirectories);
-                while (it.hasNext()) {
-                    QString filePath = it.next();
-                    musicQueue.addToQueue(filePath);
+            QStringList fileNames = dialog.selectedFiles();
+            musicQueue = MusicQueue();
+
+            for (const QString& fileName : fileNames)
+            {
+                QFileInfo fileInfo(fileName);
+                if (fileInfo.isFile()) {
+                    musicQueue.addToQueue(fileName);
+                } else if (fileInfo.isDir()) {
+                    QDirIterator it(fileName, QStringList() << "*.mp3" << "*.ogg" << "*.wav" << "*.flac" << "*.opus" << "*.m4a", QDir::Files, QDirIterator::Subdirectories);
+                    while (it.hasNext()) {
+                        QString filePath = it.next();
+                        musicQueue.addToQueue(filePath);
+                    }
                 }
             }
-        }
 
-        if (!musicQueue.isQueueEmpty() && !player->isPlaying())
+            if (!musicQueue.isQueueEmpty() && !player->isPlaying())
+            {
+                playNextTrack();
+            }
+        }
+    }
+    else if (selectedAction == openDirectoryAction)
+    {
+        // Обработка выбора "Open Directory"
+        QString directoryPath = QFileDialog::getExistingDirectory(nullptr, "Open Directory", QDir::homePath());
+
+        if (!directoryPath.isEmpty())
         {
-            playNextTrack();
+            QDirIterator it(directoryPath, QStringList() << "*.mp3" << "*.ogg" << "*.wav" << "*.flac" << "*.opus" << "*.m4a", QDir::Files, QDirIterator::Subdirectories);
+            while (it.hasNext()) {
+                QString filePath = it.next();
+                musicQueue.addToQueue(filePath);
+            }
+
+            if (!musicQueue.isQueueEmpty() && !player->isPlaying())
+            {
+                playNextTrack();
+            }
         }
     }
 }
@@ -593,61 +618,82 @@ void onPrevious()
     }
 }
 
-// action buttons
-void viewMusic() {
-    QStringList queueList;
-    for (const QString &song : musicQueue.getQueue()) {
-        QString title;
-        QString artist;
-        TagLib::FileRef file(song.toUtf8().constData());
-        if (!file.isNull() && file.tag()) {
-            TagLib::Tag *tag = file.tag();
-            title = QString::fromStdString(tag->title().toCString(true));
-            if (title.isEmpty()) {
+void viewTracks()
+{
+    QMenu menu;
+    QAction *viewQueueAction = menu.addAction("View Queue");
+    QAction *viewRemovedTracksAction = menu.addAction("View Removed Tracks");
+
+    QAction *selectedAction = menu.exec(QCursor::pos());
+
+    if (selectedAction == viewQueueAction)
+    {
+        // Обработка выбора "View Queue"
+        QStringList queueList;
+        for (const QString &song : musicQueue.getQueue())
+        {
+            // Добавление треков из основной очереди в список
+            QString title;
+            QString artist;
+            TagLib::FileRef file(song.toUtf8().constData());
+            if (!file.isNull() && file.tag())
+            {
+                TagLib::Tag *tag = file.tag();
+                title = QString::fromStdString(tag->title().toCString(true));
+                if (title.isEmpty())
+                {
+                    QFileInfo fileInfo(song);
+                    title = fileInfo.fileName();
+                }
+            }
+            else
+            {
                 QFileInfo fileInfo(song);
                 title = fileInfo.fileName();
             }
-        } else {
-            QFileInfo fileInfo(song);
-            title = fileInfo.fileName();
+            queueList.append(title);
         }
-        queueList.append(title);
+        QString queueText = queueList.join("\n");
+        QMessageBox msgBox;
+        msgBox.setText(queueText);
+        msgBox.setMaximumWidth(500);
+        msgBox.setWindowTitle("Queue");
+        msgBox.exec();
     }
-    QString queueText = queueList.join("\n");
-    QMessageBox msgBox;
-    msgBox.setText(queueText);
-    msgBox.setMaximumWidth(500);
-    msgBox.setWindowTitle("Queue");
-    msgBox.exec();
-}
+    else if (selectedAction == viewRemovedTracksAction)
+    {
+        // Обработка выбора "View Removed Tracks"
+        QStringList removedTracksList = removedTracksQueue.getQueue();
+        QString removedTracksText;
 
-void viewRemovedTracks() {
-    QStringList removedTracksList = removedTracksQueue.getQueue();
-    QString removedTracksText;
-
-    for (const QString &filePath : removedTracksList) {
-        TagLib::FileRef file(filePath.toUtf8().constData());
-        if (!file.isNull() && file.tag()) {
-            TagLib::Tag *tag = file.tag();
-            QString title = QString::fromStdString(tag->title().toCString(true));
-            if (title.isEmpty()) {
-                QFileInfo fileInfo(filePath);
-                title = fileInfo.fileName();
+        for (const QString &filePath : removedTracksList)
+        {
+            TagLib::FileRef file(filePath.toUtf8().constData());
+            if (!file.isNull() && file.tag())
+            {
+                TagLib::Tag *tag = file.tag();
+                QString title = QString::fromStdString(tag->title().toCString(true));
+                if (title.isEmpty())
+                {
+                    QFileInfo fileInfo(filePath);
+                    title = fileInfo.fileName();
+                }
+                removedTracksText += title + "\n";
             }
-            removedTracksText += title + "\n";
-        } else {
-            QFileInfo fileInfo(filePath);
-            removedTracksText += fileInfo.fileName() + "\n";
+            else
+            {
+                QFileInfo fileInfo(filePath);
+                removedTracksText += fileInfo.fileName() + "\n";
+            }
         }
+
+        QMessageBox msgBox;
+        msgBox.setText(removedTracksText);
+        msgBox.setMaximumWidth(500);
+        msgBox.setWindowTitle("Removed Tracks");
+        msgBox.exec();
     }
-
-    QMessageBox msgBox;
-    msgBox.setText(removedTracksText);
-    msgBox.setMaximumWidth(500);
-    msgBox.setWindowTitle("Removed Tracks");
-    msgBox.exec();
 }
-
 
 void setVolume()
 {
