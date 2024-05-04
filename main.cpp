@@ -558,7 +558,7 @@ void open()
                 }
             }
 
-            if (!musicQueue.isQueueEmpty() && !player->isPlaying())
+            if (!musicQueue.isQueueEmpty() && !player->PlayingState)
             {
                 playNextTrack();
             }
@@ -577,7 +577,7 @@ void open()
                 musicQueue.addToQueue(filePath);
             }
 
-            if (!musicQueue.isQueueEmpty() && !player->isPlaying())
+            if (!musicQueue.isQueueEmpty() && !player->PlayingState)
             {
                 playNextTrack();
             }
