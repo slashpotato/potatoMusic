@@ -44,8 +44,7 @@ HEADERS += \
 #    discord-files/types.h \
 #    discord-files/user_manager.h \
 #    discord-files/voice_manager.h \
-    mainwindow.h \
-    ui_mainwindow.h
+    mainwindow.h
 
 FORMS += \
     mainwindow.ui
