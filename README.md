@@ -25,4 +25,6 @@ Run `./potatoMusic` after building
 ### install
 Run `make install` afrer building to install. `make uninstall` to uninstall
 ## license
-potatoMusic © 2024 by slashpotato is licensed under CC BY-NC-SA 4.0 
+This software is dual-licensed under the GPL-3.0 and the BSD-3-Clause licenses, and also available under the CC-BY-NC-SA-4.0 license for third parties.
+
+`SPDX-License-Identifier: GPL-3.0 OR BSD-3-Clause OR CC-BY-NC-SA-4.0`
