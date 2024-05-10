@@ -1,5 +1,5 @@
 # potatoMusic
-<marquee>An qt music player for linux</marquee>
+An qt music player for linux
 
 ![screenshot1](https://github.com/slashpotato/potatoMusic/blob/master/screenshot1.png?raw=true)
 
