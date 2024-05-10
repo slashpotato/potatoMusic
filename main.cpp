@@ -223,12 +223,12 @@ int main(int argc, char *argv[])
     // icons
     QIcon iforward = QIcon::fromTheme("media-skip-forward");
     QIcon ibackward = QIcon::fromTheme("media-skip-backward");
-    QIcon ipause = QIcon::fromTheme("media-playback-pause");
-    QIcon iplay = QIcon::fromTheme("media-playback-start");
-    QIcon iicon = QIcon::fromTheme("audio-headphones");
-    QIcon ivolume = QIcon::fromTheme("audio-volume-high");
-    QIcon iopen = QIcon::fromTheme("folder-saved-search");
-    QIcon ilist = QIcon::fromTheme("open-menu");
+    QIcon ipause = QIcon::fromTheme("media-playback-pause", QIcon(":/icons/pause.svg"));
+    QIcon iplay = QIcon::fromTheme("media-playback-start", QIcon(":/icons/play.svg"));
+    QIcon iicon = QIcon::fromTheme("audio-headphones", QIcon(":/icons/headphones.png"));
+    QIcon ivolume = QIcon::fromTheme("audio-volume-high", QIcon(":/icons/audio.png"));
+    QIcon iopen = QIcon::fromTheme("folder-saved-search", QIcon(":/icons/folder.png"));
+    QIcon ilist = QIcon::fromTheme("open-menu", QIcon(":/icons/menu.png"));
     QIcon imore = QIcon::fromTheme("settings-symbolic", QIcon(":/icons/settings.png"));
     QIcon ihelp = QIcon::fromTheme("help-contents", QIcon(":/icons/help.png"));
 
@@ -562,6 +562,7 @@ void open()
             {
                 playNextTrack();
             }
+            qDebug() << player->PlayingState;
         }
     }
     else if (selectedAction == openDirectoryAction)

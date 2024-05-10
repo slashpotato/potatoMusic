@@ -58,6 +58,8 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 DISTFILES += \
-    LICENSE \
     PKGBUILD \
     README.md
+
+RESOURCES += \
+    potatoMusic.qrc
