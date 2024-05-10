@@ -229,8 +229,8 @@ int main(int argc, char *argv[])
     QIcon ivolume = QIcon::fromTheme("audio-volume-high");
     QIcon iopen = QIcon::fromTheme("folder-saved-search");
     QIcon ilist = QIcon::fromTheme("open-menu");
-    QIcon imore = QIcon::fromTheme("settings-symbolic");
-    QIcon ihelp = QIcon::fromTheme("help-contents");
+    QIcon imore = QIcon::fromTheme("settings-symbolic", QIcon(":/icons/settings.png"));
+    QIcon ihelp = QIcon::fromTheme("help-contents", QIcon(":/icons/help.png"));
 
     // toolbar
     QToolBar *toolbar = new QToolBar;
