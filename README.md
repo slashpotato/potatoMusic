@@ -1,6 +1,9 @@
 # potatoMusic
 An qt music player for linux
 
+![GitHub License](https://img.shields.io/github/license/slashpotato/potatoMusic?style=flat-square&labelColor=white&color=black%20)
+![GitHub Release](https://img.shields.io/github/v/release/slashpotato/potatoMusic?display_name=release&style=flat-square&labelColor=black&color=white)
+
 ![screenshot1](https://github.com/slashpotato/potatoMusic/blob/master/screenshot1.png?raw=true)
 
 theme used on screenshot: [catppuccin mocha lavender](https://github.com/catppuccin/kde)
