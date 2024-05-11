@@ -31,4 +31,4 @@ Run `make install` afrer building to install. `make uninstall` to uninstall
 This software is dual-licensed under the GPL-3.0 and the BSD-3-Clause licenses, and also available under the CC-BY-NC-SA-4.0 license for third parties
 You can choose between one of them if you use this work
 
-`SPDX-License-Identifier: GPL-3.0 OR BSD-3-Clause OR CC-BY-NC-SA-4.0`
+`SPDX-License-Identifier: GPL-3.0 OR CC-BY-NC-SA-4.0`
