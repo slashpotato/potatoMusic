@@ -2,7 +2,7 @@
 
 # Параметры
 REPO="slashpotato/potatoMusic"
-URL=$(curl -s "https://api.github.com/repos/$REPO/releases/latest" | jq -r '.assets[0].browser_download_url')
+URL=$(curl -s "https://api.github.com/repos/$REPO/releases/latest" | jq -r '.assets[0].browser_download_url' &> /dev/null ) 
 PKGBUILD="PKGBUILD"
 
 # Загрузка архива
