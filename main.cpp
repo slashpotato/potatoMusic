@@ -280,7 +280,6 @@ int main(int argc, char *argv[])
 
     // image
     songImageLabel = new QLabel;
-    QString appDir = QCoreApplication::applicationDirPath();
 
     // labels
     songname = new QLabel();
