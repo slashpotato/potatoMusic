@@ -4,8 +4,7 @@ git fetch
 
 if git status | grep 'behind' > /dev/null; then
   echo "Update found."
-  echo ""
-  git pull
+  git pull &> /dev/null && echo "Successfully updated."
   if [ -f $PWD/potatoMusic ]; then
     echo "Binary found and will be re-built."
     echo ""
