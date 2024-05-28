@@ -1,6 +1,6 @@
 #!/bin/bash
 
-git fetch
+git fetch &> /dev/null
 
 if git status | grep 'behind' > /dev/null; then
   echo "Update found."
