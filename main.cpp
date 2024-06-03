@@ -1,7 +1,6 @@
 #include "mainwindow.h"
 #include <queue>
 #include <iostream>
-#include "discord-files/discord.h"
 
 // qt
 #include <QApplication>
@@ -404,11 +403,9 @@ QPixmap extractCoverArt(const QString &filePath) {
     QImage image = QImage::fromData(imageData);
 
     if (image.isNull()) {
-        // Если не удалось извлечь изображение, верните пустую картинку
         return QPixmap();
     }
 
-    // Масштабируйте изображение до нужного размера (thumbScale x thumbScale)
     QPixmap pixmap = QPixmap::fromImage(image.scaled(thumbScale, thumbScale, Qt::KeepAspectRatio));
     return pixmap;
 }
@@ -531,7 +528,7 @@ void open()
     {
         // Обработка выбора "Open Files"
         QFileDialog dialog;
-        dialog.setFileMode(QFileDialog::ExistingFiles); // Разрешить выбор как файлов, так и папок
+        dialog.setFileMode(QFileDialog::ExistingFiles);
         dialog.setViewMode(QFileDialog::Detail);
         dialog.setNameFilters({"Audio Files (*.mp3 *.ogg *.wav *.flac *.opus *.m4a)", "Any files (*)"});
 
@@ -557,11 +554,10 @@ void open()
                 }
             }
 
-            if (!musicQueue.isQueueEmpty() && !player->PlayingState)
+            if (!musicQueue.isQueueEmpty() && !player->isPlaying())
             {
                 playNextTrack();
             }
-            qDebug() << player->PlayingState;
         }
     }
     else if (selectedAction == openDirectoryAction)
@@ -577,7 +573,7 @@ void open()
                 musicQueue.addToQueue(filePath);
             }
 
-            if (!musicQueue.isQueueEmpty() && !player->PlayingState)
+            if (!musicQueue.isQueueEmpty() && !player->isPlaying())
             {
                 playNextTrack();
             }
@@ -662,7 +658,6 @@ void viewTracks()
     }
     else if (selectedAction == viewRemovedTracksAction)
     {
-        // Обработка выбора "View Removed Tracks"
         QStringList removedTracksList = removedTracksQueue.getQueue();
         QString removedTracksText;
 
