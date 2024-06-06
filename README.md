@@ -28,7 +28,6 @@ Run `./potatoMusic` after building
 ### install
 Run `make install` afrer building to install. `make uninstall` to uninstall
 ## license
-This software is dual-licensed under GPL-3.0 and CC-BY-NC-SA-4.0 
-You can choose between one of them if you use this work
+This software is licensed under GPL-3.0
 
-`SPDX-License-Identifier: GPL-3.0 OR CC-BY-NC-SA-4.0`
+`SPDX-License-Identifier: GPL-3.0`
