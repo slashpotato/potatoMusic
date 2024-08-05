@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=potatoMusic
+Comment=potatoMusic
+Exec=/opt/potatoMusic/bin/potatoMusic
+#Icon=/opt/waterfox/browser/chrome/icons/default/default128.png
+Type=Application
+StartupNotify=false
+Keywords=potatoMusic;

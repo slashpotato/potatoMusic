@@ -6,3 +6,4 @@ if [ "$EUID" -ne 0 ]
 fi
 
 make install --jobs=$(grep -c ^processor /proc/cpuinfo)
+cp *.desktop /usr/local/share/applications
